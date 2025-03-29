@@ -10,10 +10,10 @@ const instance = new Razorpay({
 exports.placeOrder = async (request, response) => {
 
     var data = new orderModel({
-        user_id: request.body.user_id,  // यूज़र का ID
-        product_details: request.body.product_details, // प्रोडक्ट की जानकारी
-        order_total: request.body.order_total,  // कुल ऑर्डर की कीमत
-        shipping_details: request.body.shipping_details,  // डिलीवरी एड्रेस
+        user_id: request.query.user_id,  // यूज़र का ID
+        product_details: request.query.product_details, // प्रोडक्ट की जानकारी
+        order_total: request.query.order_total,  // कुल ऑर्डर की कीमत
+        shipping_details: request.query.shipping_details,  // डिलीवरी एड्रेस
         status: 1 // 1 का मतलब "Processing" स्टेटस
     })
 
@@ -73,12 +73,12 @@ exports.confirmOrder = async (request, response) => {
 
     await orderModel.updateOne(
         {
-            razorpay_order_id: request.body.order_id // Razorpay द्वारा दिया गया Order ID
+            razorpay_order_id: request.query.order_id // Razorpay द्वारा दिया गया Order ID
         },
         {
             $set: {
-                razorpay_payment_id: request.body.payment_id, // पेमेंट आईडी (Razorpay से मिली)
-                status: request.body.status // पेमेंट का स्टेटस (Success/Failed)
+                razorpay_payment_id: request.query.payment_id, // पेमेंट आईडी (Razorpay से मिली)
+                status: request.query.status // पेमेंट का स्टेटस (Success/Failed)
             }
         }
     ).then((result) => {
